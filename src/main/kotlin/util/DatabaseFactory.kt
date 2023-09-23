@@ -1,7 +1,5 @@
 package util
 
-import dev.thynanami.nextstop.backend.models.Accounts
-import dev.thynanami.nextstop.backend.models.Sites
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils

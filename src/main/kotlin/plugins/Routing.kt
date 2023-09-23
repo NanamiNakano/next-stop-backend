@@ -1,7 +1,5 @@
 package dev.thynanami.nextstop.backend.plugins
 
-
-import com.password4j.Password
 import dev.thynanami.nextstop.backend.dao.dao
 import dev.thynanami.nextstop.backend.models.Account
 import dev.thynanami.nextstop.backend.util.generateToken
@@ -24,7 +22,7 @@ fun Application.configureRouting() {
 
             post("/auth") {
                 val user = call.receive<Account>()
-                var token = dao.queryToken(user.username)
+                val token = dao.queryToken(user.username)
                 if (token == null) {
                     val newToken = generateToken()
                     dao.registerNewAccount(

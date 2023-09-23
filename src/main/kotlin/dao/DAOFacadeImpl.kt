@@ -44,7 +44,7 @@ class DAOFacadeImpl : DAOFacade {
     override suspend fun registerNewAccount(username: String, passwordHash: String, token: String): Account? = dbQuery {
         val insertStatement = Accounts.insert {
             it[Accounts.username] = username
-            it[Accounts.password] = hashPassword(passwordHash)
+            it[password] = hashPassword(passwordHash)
             it[Accounts.token] = token
         }
         insertStatement.resultedValues?.singleOrNull()?.let(::resultRowToAccount)
