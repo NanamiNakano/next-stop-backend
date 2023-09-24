@@ -8,7 +8,7 @@ plugins {
 
 }
 
-group = "dev.thynanami.next-stop"
+group = "dev.thynanami.nextstop"
 version = "1.0-SNAPSHOT"
 
 repositories {
