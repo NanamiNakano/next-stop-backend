@@ -3,13 +3,26 @@ FROM gradle:8.3.0-jdk17-jammy AS base
 # setup workdir
 WORKDIR /app
 
-FROM base as builder
+FROM base AS deps-cache
+# prepare cache dir
+RUN mkdir -p /home/gradle/cache
+ENV GRADLE_USER_HOME /home/gradle/cache
+
+# only copy dependency-related files
+COPY build.gradle.kts gradle.properties settings.gradle.kts /app/
+
+# download dependencies
+RUN gradle clean build -i --no-daemon
+
+FROM deps-cache as builder
+# copy cache
+COPY --from=deps-cache /home/gradle/cache /home/gradle/.gradle
 
 # build application
 COPY . .
-RUN gradle shadowJar && cp ./build/libs/backend-all.jar /app
+RUN gradle shadowJar --no-daemon && cp ./build/libs/backend-all.jar /app
 
-FROM azul/zulu-openjdk-alpine:18-latest  AS deps
+FROM azul/zulu-openjdk-alpine:18-latest  AS deps-info
 
 # resolve dependencies
 COPY --from=builder /app/backend-all.jar /app/backend-all.jar
@@ -33,7 +46,7 @@ FROM azul/zulu-openjdk-alpine:17-latest AS zulu-jdk17
 RUN apk add --no-cache binutils
 
 # get dependencies info
-COPY --from=deps /deps.info /deps.info
+COPY --from=deps-info /deps.info /deps.info
 
 # build slim jre
 RUN $JAVA_HOME/bin/jlink \
@@ -66,10 +79,9 @@ USER 1000
 # setup application
 COPY --chown=1000:1000 --from=builder /app/backend-all.jar /app/backend-all.jar
 COPY --chown=1000:1000 ./psw4j.properties /app/psw4j.properties
-COPY --chown=1000:1000 ./keystore.jks /app/keystore.jks
 
 WORKDIR /app
 
 # ssl port
-EXPOSE 8443
+EXPOSE 8080
 ENTRYPOINT ["/jre/bin/java", "-Dpsw4j.configuration=psw4j.properties", "-jar", "backend-all.jar"]

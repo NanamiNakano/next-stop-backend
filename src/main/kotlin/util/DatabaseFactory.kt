@@ -9,10 +9,10 @@ import org.jetbrains.exposed.sql.transactions.transaction
 object DatabaseFactory {
     private val db by lazy {
         Database.connect(
-            url = "jdbc:postgresql://localhost:5432/postgres",
+            url = "jdbc:postgresql://${System.getenv("POSTGRES_HOST")}/${System.getenv("POSTGRES_DATABASE")}",
             driver = "org.postgresql.Driver",
-            user = "postgres",
-            password = "example"
+            user = System.getenv("POSTGRES_USER"),
+            password = System.getenv("POSTGRES_PASSWORD")
         )
     }
 

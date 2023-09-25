@@ -40,10 +40,6 @@ dependencies {
     implementation("com.password4j:password4j:1.7.3")
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
-
 kotlin {
     jvmToolchain(17)
 }
@@ -51,3 +47,10 @@ kotlin {
 application {
     mainClass.set("io.ktor.server.netty.EngineMain")
 }
+
+tasks{
+    test {
+        useJUnitPlatform()
+    }
+}
+

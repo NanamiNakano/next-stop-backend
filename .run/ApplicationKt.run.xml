@@ -1,0 +1,17 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ApplicationKt" type="JetRunConfigurationType" nameIsGenerated="true">
+    <envs>
+      <env name="POSTGRES_DATABASE" value="postgres" />
+      <env name="POSTGRES_HOST" value="localhost:5432" />
+      <env name="POSTGRES_PASSWORD" value="example" />
+      <env name="POSTGRES_USER" value="postgres" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="dev.thynanami.nextstop.backend.ApplicationKt" />
+    <module name="backend.main" />
+    <option name="PROGRAM_PARAMETERS" value="-Dpsw4j.configuration=psw4j.properties" />
+    <shortenClasspath name="NONE" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

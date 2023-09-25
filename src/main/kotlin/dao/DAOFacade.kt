@@ -9,10 +9,10 @@ interface DAOFacade {
     suspend fun allSites(): List<Site>
     suspend fun site(uuid: UUID): Site?
     suspend fun addNewSite(uuid: UUID, sitename: String, url: String, alive: Boolean): Site?
+    suspend fun randomSite():Site
 
     // account sql methods
     suspend fun registerNewAccount(username: String, passwordHash: String, token: String): Account?
     suspend fun queryToken(username: String): String?
     suspend fun queryAccount(username: String = "", token: String = ""): Account?
-
 }

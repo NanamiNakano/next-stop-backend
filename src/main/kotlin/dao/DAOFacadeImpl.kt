@@ -41,6 +41,8 @@ class DAOFacadeImpl : DAOFacade {
         insertStatement.resultedValues?.singleOrNull()?.let(::resultRowToSite)
     }
 
+    override suspend fun randomSite(): Site = allSites().random()
+
     override suspend fun registerNewAccount(username: String, passwordHash: String, token: String): Account? = dbQuery {
         val insertStatement = Accounts.insert {
             it[Accounts.username] = username

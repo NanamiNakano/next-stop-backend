@@ -57,7 +57,7 @@ fun Application.configureRouting() {
 
                 route("/random") {
                     get {
-
+                        call.respond(dao.randomSite())
                     }
                 }
             }
