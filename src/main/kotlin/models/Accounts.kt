@@ -1,14 +1,24 @@
 package dev.thynanami.nextstop.backend.models
 
+import dev.thynanami.nextstop.backend.util.UUIDSerializer
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
 import java.util.UUID
 
 @Serializable
+data class CallUser(
+    val username: String,
+    val password: String
+)
+
+@Serializable
 data class Account(
+    @Serializable(with = UUIDSerializer::class)
+    val uuid: UUID,
     val username:String,
     val password:String,
+    val token:String
 )
 
 object Accounts : Table() {

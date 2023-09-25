@@ -1,7 +1,7 @@
 package dev.thynanami.nextstop.backend.plugins
 
 import dev.thynanami.nextstop.backend.dao.dao
-import dev.thynanami.nextstop.backend.models.Account
+import dev.thynanami.nextstop.backend.models.CallUser
 import dev.thynanami.nextstop.backend.util.generateToken
 import dev.thynanami.nextstop.backend.util.passwordIsVerified
 import io.ktor.http.*
@@ -11,7 +11,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.util.*
-import java.util.UUID
+import java.util.*
 
 fun Application.configureRouting() {
     routing {
@@ -21,18 +21,22 @@ fun Application.configureRouting() {
             }
 
             post("/auth") {
-                val user = call.receive<Account>()
-                val token = dao.queryToken(user.username)
-                if (token == null) {
+                val callUser = call.receive<CallUser>()
+                val user = dao.queryAccount(callUser.username)
+                if (user == null) {
                     val newToken = generateToken()
-                    dao.registerNewAccount(
-                        user.username,
-                        user.password,
+                    val newUser = dao.registerNewAccount(
+                        callUser.username,
+                        callUser.password,
                         newToken
                     )
-                    call.respond(HttpStatusCode.OK, "Successful registered! Your API token is $newToken")
-                } else if (passwordIsVerified(user.username, user.password)) {
-                    call.respond(HttpStatusCode.OK, token)
+                    if (newUser == null) {
+                        call.respond(HttpStatusCode.InternalServerError)
+                    } else {
+                        call.respond(HttpStatusCode.OK, newUser.token)
+                    }
+                } else if (passwordIsVerified(callUser.username, callUser.password)) {
+                    call.respond(HttpStatusCode.OK, user.token)
                 } else {
                     call.respond(HttpStatusCode.Unauthorized)
                 }

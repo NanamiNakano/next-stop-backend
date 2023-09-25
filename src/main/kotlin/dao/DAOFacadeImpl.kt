@@ -19,8 +19,10 @@ class DAOFacadeImpl : DAOFacade {
     )
 
     private fun resultRowToAccount(row: ResultRow) = Account(
+        uuid = row[Accounts.uuid],
         username = row[Accounts.username],
         password = row[Accounts.password],
+        token = row[Accounts.token]
     )
 
     override suspend fun allSites(): List<Site> = dbQuery {
@@ -50,10 +52,6 @@ class DAOFacadeImpl : DAOFacade {
             it[Accounts.token] = token
         }
         insertStatement.resultedValues?.singleOrNull()?.let(::resultRowToAccount)
-    }
-
-    override suspend fun queryToken(username: String): String? = dbQuery {
-        Accounts.select { Accounts.username eq username }.singleOrNull()?.get(Accounts.token)
     }
 
     override suspend fun queryAccount(username: String, token: String): Account? =

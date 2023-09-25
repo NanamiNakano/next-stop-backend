@@ -37,6 +37,7 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json")
     implementation("io.ktor:ktor-server-auth")
     implementation("io.ktor:ktor-network-tls-certificates")
+    implementation("io.ktor:ktor-server-rate-limit")
     implementation("com.password4j:password4j:1.7.3")
 }
 

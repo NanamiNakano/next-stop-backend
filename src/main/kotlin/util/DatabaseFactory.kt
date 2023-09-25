@@ -1,5 +1,7 @@
 package util
 
+import dev.thynanami.nextstop.backend.models.Accounts
+import dev.thynanami.nextstop.backend.models.Sites
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -18,7 +20,8 @@ object DatabaseFactory {
 
     fun init() {
         transaction(db) {
-            SchemaUtils.createMissingTablesAndColumns()
+            SchemaUtils.create(Sites)
+            SchemaUtils.create(Accounts)
         }
     }
 
