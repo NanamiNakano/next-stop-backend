@@ -12,6 +12,6 @@ interface DAOFacade {
     suspend fun randomSite():Site
 
     // account sql methods
-    suspend fun registerNewAccount(username: String, passwordHash: String, token: String): Account?
+    suspend fun registerNewAccount(username: String, password: String, token: String): Account?
     suspend fun queryAccount(username: String = "", token: String = ""): Account?
 }

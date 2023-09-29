@@ -45,7 +45,7 @@ fun Application.configureRouting() {
             authenticate("auth-bearer") {
                 route("/sites") {
                     get {
-                        call.respond(mapOf("site" to dao.allSites()))
+                        call.respond(dao.allSites())
                     }
 
                     get("/{uuid}") {

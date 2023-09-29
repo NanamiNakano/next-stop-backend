@@ -5,7 +5,6 @@ import dev.thynanami.nextstop.backend.models.Accounts
 import dev.thynanami.nextstop.backend.models.Site
 import dev.thynanami.nextstop.backend.models.Sites
 import dev.thynanami.nextstop.backend.util.hashPassword
-import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
@@ -45,10 +44,10 @@ class DAOFacadeImpl : DAOFacade {
 
     override suspend fun randomSite(): Site = allSites().random()
 
-    override suspend fun registerNewAccount(username: String, passwordHash: String, token: String): Account? = dbQuery {
+    override suspend fun registerNewAccount(username: String, password: String, token: String): Account? = dbQuery {
         val insertStatement = Accounts.insert {
             it[Accounts.username] = username
-            it[password] = hashPassword(passwordHash)
+            it[this.password] = hashPassword(password)
             it[Accounts.token] = token
         }
         insertStatement.resultedValues?.singleOrNull()?.let(::resultRowToAccount)
@@ -70,12 +69,4 @@ class DAOFacadeImpl : DAOFacade {
 }
 
 
-val dao: DAOFacade = DAOFacadeImpl().apply {
-    runBlocking {
-        if (allSites().isEmpty()) {
-            addNewSite(
-                UUID(0, 0), "example", "https://www.example.com", true
-            )
-        }
-    }
-}
+val dao: DAOFacade = DAOFacadeImpl()

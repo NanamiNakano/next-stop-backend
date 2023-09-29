@@ -5,7 +5,7 @@ plugins {
     application
     id("io.ktor.plugin") version "2.3.4"
     kotlin("plugin.serialization") version "1.9.0"
-
+    id("org.flywaydb.flyway") version "9.19.0"
 }
 
 group = "dev.thynanami.nextstop"
@@ -15,9 +15,16 @@ repositories {
     mavenCentral()
 }
 
+buildscript {
+    dependencies {
+        classpath("org.postgresql:postgresql:42.2.27")
+    }
+}
+
 dependencies {
     val logbackVersion = "1.4.11"
     testImplementation(kotlin("test"))
+    testImplementation("io.ktor:ktor-client-content-negotiation")
 
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-crypt:$exposedVersion")
@@ -38,6 +45,7 @@ dependencies {
     implementation("io.ktor:ktor-server-auth")
     implementation("io.ktor:ktor-network-tls-certificates")
     implementation("io.ktor:ktor-server-rate-limit")
+    implementation("io.ktor:ktor-server-test-host")
     implementation("com.password4j:password4j:1.7.3")
 }
 
@@ -55,3 +63,8 @@ tasks{
     }
 }
 
+flyway {
+    url = "jdbc:postgresql://localhost:5432/postgres"
+    user = "postgres"
+    password = "example"
+}
