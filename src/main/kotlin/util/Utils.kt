@@ -8,9 +8,11 @@ import dev.thynanami.nextstop.backend.dao.dao
 val argon2: Argon2Function = Argon2Function.getInstance(47104, 1, 1,128,Argon2.ID)
 
 fun generateToken():String {
-    val charset ="ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz0123456789"
+    val charset = ('A'..'Z') + ('a'..'z') + ('0'..'9')
     return (1..256).map { charset.random() }.joinToString("")
 }
+
+
 
 suspend fun passwordIsVerified(username:String, password:String):Boolean {
     val account = dao.queryAccount(username = username)
