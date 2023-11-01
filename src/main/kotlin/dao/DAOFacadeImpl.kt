@@ -5,10 +5,7 @@ import dev.thynanami.nextstop.backend.models.Accounts
 import dev.thynanami.nextstop.backend.models.Site
 import dev.thynanami.nextstop.backend.models.Sites
 import dev.thynanami.nextstop.backend.util.hashPassword
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
 import util.DatabaseFactory.dbQuery
 import java.util.*
 
@@ -43,6 +40,14 @@ class DAOFacadeImpl : DAOFacade {
     }
 
     override suspend fun randomSite(): Site = allSites().random()
+
+    override suspend fun updateSiteAlive(site:Site, status: Boolean) {
+        dbQuery {
+            Sites.update({Sites.uuid eq site.uuid}) {
+                it[alive] = status
+            }
+        }
+    }
 
     override suspend fun registerNewAccount(username: String, password: String, token: String): Account? = dbQuery {
         val insertStatement = Accounts.insert {

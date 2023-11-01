@@ -2,6 +2,7 @@ package dev.thynanami.nextstop.backend.plugins
 
 import dev.thynanami.nextstop.backend.dao.dao
 import dev.thynanami.nextstop.backend.models.CallUser
+import dev.thynanami.nextstop.backend.models.Site
 import dev.thynanami.nextstop.backend.util.generateToken
 import dev.thynanami.nextstop.backend.util.passwordIsVerified
 import io.ktor.http.*
@@ -54,7 +55,7 @@ fun Application.configureRouting() {
                         if (site == null) {
                             call.respond(HttpStatusCode.NotFound, "This site dose not exist!")
                         } else {
-                            call.respond(site)
+                            call.respond(HttpStatusCode.OK, site)
                         }
                     }
                 }
@@ -62,6 +63,14 @@ fun Application.configureRouting() {
                 route("/random") {
                     get {
                         call.respond(dao.randomSite())
+                    }
+                }
+
+                route("/add") {
+                    post {
+                        val site = call.receive<Site>()
+                        dao.addNewSite(site.uuid,site.sitename,site.url,site.alive)
+                        call.respondText("Sites added", status = HttpStatusCode.Created)
                     }
                 }
             }

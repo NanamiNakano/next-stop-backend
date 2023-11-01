@@ -10,6 +10,7 @@ interface DAOFacade {
     suspend fun site(uuid: UUID): Site?
     suspend fun addNewSite(uuid: UUID, sitename: String, url: String, alive: Boolean): Site?
     suspend fun randomSite():Site
+    suspend fun updateSiteAlive(site:Site, status: Boolean)
 
     // account sql methods
     suspend fun registerNewAccount(username: String, password: String, token: String): Account?

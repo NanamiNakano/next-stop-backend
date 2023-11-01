@@ -45,6 +45,7 @@ dependencies {
     implementation("io.ktor:ktor-server-rate-limit")
     implementation("io.ktor:ktor-server-test-host")
     implementation("com.password4j:password4j:1.7.3")
+    implementation("dev.inmo:krontab:2.2.2")
 }
 
 kotlin {
